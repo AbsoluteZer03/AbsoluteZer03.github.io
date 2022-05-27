@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AbsoluteZer03 CTF Writeups</title>
+    <link>http://AbsoluteZer03.github.io/</link>
+    <description>Recent content on AbsoluteZer03 CTF Writeups</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 27 May 2022 02:31:58 -0400</lastBuildDate><atom:link href="http://AbsoluteZer03.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB_CyberApocalypse2022</title>
+      <link>http://AbsoluteZer03.github.io/posts/htb_cyberapocalypse2022/</link>
+      <pubDate>Fri, 27 May 2022 02:31:58 -0400</pubDate>
+      
+      <guid>http://AbsoluteZer03.github.io/posts/htb_cyberapocalypse2022/</guid>
+      <description>Cyber Apocalypse 2022 Intergalactic Chase Forensics Intergalactic Recovery   Miyuki’s team stores all the evidence from important cases in a shared RAID 5 disk. Especially now that the case IMW-1337 is almost completed, evidences and clues are needed more than ever. Unfortunately for the team, an electromagnetic pulse caused by Draeger’s EMP cannon has partially destroyed the disk. Can you help her and the rest of team recover the content of the failed disk?</description>
+      <content>&lt;h1 id=&#34;cyber-apocalypse-2022-intergalactic-chase&#34;&gt;Cyber Apocalypse 2022 Intergalactic Chase&lt;/h1&gt;
+&lt;h2 id=&#34;forensics&#34;&gt;Forensics&lt;/h2&gt;
+&lt;h2 id=&#34;intergalactic-recovery&#34;&gt;Intergalactic Recovery&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Miyuki’s team stores all the evidence from important cases in a shared RAID 5 disk. Especially now that the case IMW-1337 is almost completed, evidences and clues are needed more than ever. Unfortunately for the team, an electromagnetic pulse caused by Draeger’s EMP cannon has partially destroyed the disk. Can you help her and the rest of team recover the content of the failed disk? Download: http://134.209.177.115/forensics/forensics_intergalactic_recovery.zip&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;all-reference-links-on-bottom-of-page&#34;&gt;All reference links on bottom of page.&lt;/h4&gt;
+&lt;h3 id=&#34;step-1---starting-the-challenge&#34;&gt;Step 1 - Starting the challenge&lt;/h3&gt;
+&lt;p&gt;After downloading and examining the file it looks like we have 3 disk.img&amp;rsquo;s. &lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+So because I have no prior experience with raid I looked up a little bit about it. I decided to examine the img&amp;rsquo;s to see if any of them were smaller in size. Disk 3 was only 3.7kb while disk 1 &amp;amp; 2 were 5mb. I assumed disk 3 was the one that needed repaired.disk.img&amp;rsquo;s.&lt;/p&gt;
+&lt;h3 id=&#34;step-2---mdadm&#34;&gt;Step 2 - Mdadm&lt;/h3&gt;
+&lt;p&gt;My initial thought was to go through and try and set up the raid disk to see if it would repair its self using mdadm and losetup.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;sudo apt-get install mdadm
+
+sudo losetup /dev/loop1 disk1.img
+
+sudo losetup /dev/loop2 disk2.img
+
+sudo losetup /dev/loop3 disk3.img
+
+sudo mdadm --create /dev/md0 --level&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt; --raid-devices&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; /dev/loop1 /dev/loop2 /dev/loop3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;It didn&amp;rsquo;t repair itself due to the emp deleting a portion of disk 3&amp;rsquo;s data as I presumed. My next thought was what if I added a disk 3a the same size as disk 1 and 2 and tried to get it to repair that way. So I ran the previous commands, but with disk 3a losetup.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;sudo dd &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/dev/zero of&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;disk3a.img bs&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;5,242,880 count&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This also didn&amp;rsquo;t create a proper image, but I got a corrupt pdf with the name &amp;ldquo;imw_1337.pdf&amp;rdquo;. After looking through the challenge description and discord I came across a hint the mods had given. &amp;ldquo;The names my not necessarily describe the order.&amp;rdquo; This meant that disk 3 could actually be disk one.&lt;/p&gt;
+&lt;p&gt;Time to get scripting&amp;hellip;&lt;/p&gt;
+&lt;h3 id=&#34;step-3---scripting&#34;&gt;Step 3 - Scripting&lt;/h3&gt;
+&lt;p&gt;So I made a bash script that would automate the process. It would go in to the directory, make a 3a, and create an image following a given array so that way we could get all permutations of the disks. Then delete the files, stop the loops, and unmount it. Then unzip the file and start again with brand new disks to ensure they weren&amp;rsquo;t changed.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;cd ~/Desktop
+unzip -q forensics_intergalactic_recovery.zip
+cd forensics_intergalactic_recovery
+sudo dd &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/dev/zero of&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;disk3a.img bs&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5242880&lt;/span&gt; count&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+perm&lt;span style=&#34;color:#f92672&#34;&gt;=(&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;123&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;231&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;312&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;213&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;321&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;132&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; t in &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;perm[@]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i in &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; ; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+                sudo losetup /dev/loop&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;i&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; disk&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;i&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;.img
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+        sudo losetup /dev/loop3 disk3a.img
+        sudo mdadm --create /dev/md0 --level&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt; --raid-devices&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; /dev/loop&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;t:0:1&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; /dev/loop&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;t:1:1&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; /dev/loop&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;t:2:1&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+        read -p &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Press [Enter] key to start backup...&amp;#34;&lt;/span&gt;
+        sudo umount /dev/md0
+        sudo mdadm --stop /dev/md0
+        sudo losetup -D
+        sudo losetup -a
+        read -p &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Press [Enter] key to start backup ...&amp;#34;&lt;/span&gt;
+        cd ~/Desktop
+        sudo rm -r forensics_intergalactic_recovery
+        unzip -q forensics_intergalactic_recovery.zip
+        cd forensics_intergalactic_recovery
+        sudo dd &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/dev/zero of&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;disk3a.img bs&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5242880&lt;/span&gt; count&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This also failed.&lt;/p&gt;
+&lt;h3 id=&#34;step-4---xor-bit-by-bit&#34;&gt;Step 4 - XOR Bit by Bit&lt;/h3&gt;
+&lt;p&gt;So after looking up some ctf writeups with similar problems I came across (CTF 1) It showed me that I need to XOR disk 1 &amp;amp; disk 2 bit by bit to get a useable disk 3. After playing around with the script shown on the writeup, my teammate M4uler had messaged me saying he had got one working.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/env python3&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; pwn &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;with&lt;/span&gt; open(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;disk1.img&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;rb&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; f1:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;with&lt;/span&gt; open(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;disk2.img&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;rb&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; f2:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;with&lt;/span&gt; open(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;disk3.img&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;wb&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; f3:
+            x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; f1&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;read()
+            y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; f2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;read()
+            f3&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;write(xor(x,y))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Using this I was able to get a usable disk3.img.&lt;/p&gt;
+&lt;h3 id=&#34;step-5---getting-the-flag&#34;&gt;Step 5 - Getting the Flag&lt;/h3&gt;
+&lt;p&gt;Using the new disk3 I got by XOR&amp;rsquo;ing disks 1 &amp;amp; 2 with the python script I ran a new bash script that was an edited version of the prior bash script to get all the permutations with the new disk.img.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;cd ~/Desktop
+unzip -q forensics_intergalactic_recovery.zip
+cd forensics_intergalactic_recovery
+perm&lt;span style=&#34;color:#f92672&#34;&gt;=(&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;123&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;231&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;312&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;213&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;321&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;132&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; t in &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;perm[@]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i in &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; 3; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+        sudo losetup /dev/loop&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;i&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; disk&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;i&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;.img
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+        sudo mdadm --create /dev/md0 --level&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt; --raid-devices&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; /dev/loop&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;t:0:1&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; /dev/loop&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;t:1:1&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; /dev/loop&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;t:2:1&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+        read -p &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Press [Enter] key to start backup...&amp;#34;&lt;/span&gt;
+        sudo umount /dev/md0
+        sudo mdadm --stop /dev/md0                                                                                                                                                 
+        sudo losetup -D                                                                                                                                                            
+        sudo losetup -a                                                                                                                                                            
+        sudo rm -r forensics_intergalactic_recovery                                                                                                                                
+        unzip -q forensics_intergalactic_recovery.zip
+        cd forensics_intergalactic_recovery
+&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;On the second loop (Disk order 231) I got the flag.&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;&lt;img src=&#34;https://imgur.com/gallery/Zyf6P6K&#34; alt=&#34;Flag&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;h5 id=&#34;reference-links&#34;&gt;Reference Links&lt;/h5&gt;
+&lt;p&gt;&lt;a href=&#34;https://itarow.xyz/posts/phack-ctf-2021_raid-dead-redemption_write-up/&#34;&gt;The CTF Writeup That Helped&lt;/a&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;a href=&#34;https://en.wikipedia.org/wiki/RAID&#34;&gt;Raid 5 Summary&lt;/a&gt;&lt;/p&gt;
+</content>
+    </item>
+    
+  </channel>
+</rss>

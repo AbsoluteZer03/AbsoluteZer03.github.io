@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>HTB_CyberApocalypse2022 :: AbsoluteZer03 CTF Writeups</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Cyber Apocalypse 2022 Intergalactic Chase Forensics Intergalactic Recovery   Miyuki’s team stores all the evidence from important cases in a shared RAID 5 disk. Especially now that the case IMW-1337 is almost completed, evidences and clues are needed more than ever. Unfortunately for the team, an electromagnetic pulse caused by Draeger’s EMP cannon has partially destroyed the disk. Can you help her and the rest of team recover the content of the failed disk?" />
+<meta name="keywords" content=", " />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="http://AbsoluteZer03.github.io/posts/htb_cyberapocalypse2022/" />
+
+
+
+
+<link rel="stylesheet" href="http://AbsoluteZer03.github.io/assets/style.css">
+
+  <link rel="stylesheet" href="assets/%25!s%28%3cnil%3e%29.css">
+
+
+
+
+
+
+<link rel="apple-touch-icon" href="http://AbsoluteZer03.github.io/img/apple-touch-icon-192x192.png">
+
+  <link rel="shortcut icon" href="http://AbsoluteZer03.github.io/img/favicon/orange.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="HTB_CyberApocalypse2022">
+<meta property="og:description" content="Cyber Apocalypse 2022 Intergalactic Chase Forensics Intergalactic Recovery   Miyuki’s team stores all the evidence from important cases in a shared RAID 5 disk. Especially now that the case IMW-1337 is almost completed, evidences and clues are needed more than ever. Unfortunately for the team, an electromagnetic pulse caused by Draeger’s EMP cannon has partially destroyed the disk. Can you help her and the rest of team recover the content of the failed disk?" />
+<meta property="og:url" content="http://AbsoluteZer03.github.io/posts/htb_cyberapocalypse2022/" />
+<meta property="og:site_name" content="AbsoluteZer03 CTF Writeups" />
+
+  <meta property="og:image" content="http://AbsoluteZer03.github.io/">
+
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+
+  <meta property="article:published_time" content="2022-05-27 02:31:58 -0400 EDT" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="">
+
+
+<div class="container headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="http://AbsoluteZer03.github.io/">
+  <div class="logo">
+    Terminal
+  </div>
+</a>
+
+    </div>
+    
+  </div>
+  
+</header>
+
+
+  <div class="content">
+    
+<div class="post">
+  <h1 class="post-title">
+    <a href="http://AbsoluteZer03.github.io/posts/htb_cyberapocalypse2022/">HTB_CyberApocalypse2022</a></h1>
+  <div class="post-meta">
+    
+      <span class="post-date">
+        2022-05-27
+        
+      </span>
+    
+    
+    
+  </div>
+
+  
+  <span class="post-tags">
+    
+    #<a href="http://AbsoluteZer03.github.io/tags/"></a>&nbsp;
+    
+    #<a href="http://AbsoluteZer03.github.io/tags/"></a>&nbsp;
+    
+  </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <h1 id="cyber-apocalypse-2022-intergalactic-chase">Cyber Apocalypse 2022 Intergalactic Chase<a href="#cyber-apocalypse-2022-intergalactic-chase" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<h2 id="forensics">Forensics<a href="#forensics" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<h2 id="intergalactic-recovery">Intergalactic Recovery<a href="#intergalactic-recovery" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<blockquote>
+<ul>
+<li>Miyuki’s team stores all the evidence from important cases in a shared RAID 5 disk. Especially now that the case IMW-1337 is almost completed, evidences and clues are needed more than ever. Unfortunately for the team, an electromagnetic pulse caused by Draeger’s EMP cannon has partially destroyed the disk. Can you help her and the rest of team recover the content of the failed disk? Download: http://134.209.177.115/forensics/forensics_intergalactic_recovery.zip</li>
+</ul>
+</blockquote>
+<h4 id="all-reference-links-on-bottom-of-page">All reference links on bottom of page.<a href="#all-reference-links-on-bottom-of-page" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+<h3 id="step-1---starting-the-challenge">Step 1 - Starting the challenge<a href="#step-1---starting-the-challenge" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>After downloading and examining the file it looks like we have 3 disk.img&rsquo;s. <!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+So because I have no prior experience with raid I looked up a little bit about it. I decided to examine the img&rsquo;s to see if any of them were smaller in size. Disk 3 was only 3.7kb while disk 1 &amp; 2 were 5mb. I assumed disk 3 was the one that needed repaired.disk.img&rsquo;s.</p>
+<h3 id="step-2---mdadm">Step 2 - Mdadm<a href="#step-2---mdadm" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>My initial thought was to go through and try and set up the raid disk to see if it would repair its self using mdadm and losetup.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo apt-get install mdadm
+
+sudo losetup /dev/loop1 disk1.img
+
+sudo losetup /dev/loop2 disk2.img
+
+sudo losetup /dev/loop3 disk3.img
+
+sudo mdadm --create /dev/md0 --level<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span> --raid-devices<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> /dev/loop1 /dev/loop2 /dev/loop3
+</code></pre></div><p>It didn&rsquo;t repair itself due to the emp deleting a portion of disk 3&rsquo;s data as I presumed. My next thought was what if I added a disk 3a the same size as disk 1 and 2 and tried to get it to repair that way. So I ran the previous commands, but with disk 3a losetup.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo dd <span style="color:#66d9ef">if</span><span style="color:#f92672">=</span>/dev/zero of<span style="color:#f92672">=</span>disk3a.img bs<span style="color:#f92672">=</span>5,242,880 count<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</code></pre></div><p>This also didn&rsquo;t create a proper image, but I got a corrupt pdf with the name &ldquo;imw_1337.pdf&rdquo;. After looking through the challenge description and discord I came across a hint the mods had given. &ldquo;The names my not necessarily describe the order.&rdquo; This meant that disk 3 could actually be disk one.</p>
+<p>Time to get scripting&hellip;</p>
+<h3 id="step-3---scripting">Step 3 - Scripting<a href="#step-3---scripting" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>So I made a bash script that would automate the process. It would go in to the directory, make a 3a, and create an image following a given array so that way we could get all permutations of the disks. Then delete the files, stop the loops, and unmount it. Then unzip the file and start again with brand new disks to ensure they weren&rsquo;t changed.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
+</span><span style="color:#75715e"></span>cd ~/Desktop
+unzip -q forensics_intergalactic_recovery.zip
+cd forensics_intergalactic_recovery
+sudo dd <span style="color:#66d9ef">if</span><span style="color:#f92672">=</span>/dev/zero of<span style="color:#f92672">=</span>disk3a.img bs<span style="color:#f92672">=</span><span style="color:#ae81ff">5242880</span> count<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+perm<span style="color:#f92672">=(</span><span style="color:#e6db74">&#34;123&#34;</span> <span style="color:#e6db74">&#34;231&#34;</span> <span style="color:#e6db74">&#34;312&#34;</span> <span style="color:#e6db74">&#34;213&#34;</span> <span style="color:#e6db74">&#34;321&#34;</span> <span style="color:#e6db74">&#34;132&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">for</span> t in <span style="color:#e6db74">${</span>perm[@]<span style="color:#e6db74">}</span>; <span style="color:#66d9ef">do</span>
+        <span style="color:#66d9ef">for</span> i in <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> ; <span style="color:#66d9ef">do</span>
+                sudo losetup /dev/loop<span style="color:#e6db74">${</span>i<span style="color:#e6db74">}</span> disk<span style="color:#e6db74">${</span>i<span style="color:#e6db74">}</span>.img
+        <span style="color:#66d9ef">done</span>
+        sudo losetup /dev/loop3 disk3a.img
+        sudo mdadm --create /dev/md0 --level<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span> --raid-devices<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> /dev/loop<span style="color:#e6db74">${</span>t:0:1<span style="color:#e6db74">}</span> /dev/loop<span style="color:#e6db74">${</span>t:1:1<span style="color:#e6db74">}</span> /dev/loop<span style="color:#e6db74">${</span>t:2:1<span style="color:#e6db74">}</span>
+        read -p <span style="color:#e6db74">&#34;Press [Enter] key to start backup...&#34;</span>
+        sudo umount /dev/md0
+        sudo mdadm --stop /dev/md0
+        sudo losetup -D
+        sudo losetup -a
+        read -p <span style="color:#e6db74">&#34;Press [Enter] key to start backup ...&#34;</span>
+        cd ~/Desktop
+        sudo rm -r forensics_intergalactic_recovery
+        unzip -q forensics_intergalactic_recovery.zip
+        cd forensics_intergalactic_recovery
+        sudo dd <span style="color:#66d9ef">if</span><span style="color:#f92672">=</span>/dev/zero of<span style="color:#f92672">=</span>disk3a.img bs<span style="color:#f92672">=</span><span style="color:#ae81ff">5242880</span> count<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+<span style="color:#66d9ef">done</span>
+</code></pre></div><p>This also failed.</p>
+<h3 id="step-4---xor-bit-by-bit">Step 4 - XOR Bit by Bit<a href="#step-4---xor-bit-by-bit" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>So after looking up some ctf writeups with similar problems I came across (CTF 1) It showed me that I need to XOR disk 1 &amp; disk 2 bit by bit to get a useable disk 3. After playing around with the script shown on the writeup, my teammate M4uler had messaged me saying he had got one working.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/env python3</span>
+
+<span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+
+<span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;disk1.img&#39;</span>, <span style="color:#e6db74">&#39;rb&#39;</span>) <span style="color:#66d9ef">as</span> f1:
+    <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;disk2.img&#39;</span>, <span style="color:#e6db74">&#39;rb&#39;</span>) <span style="color:#66d9ef">as</span> f2:
+        <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;disk3.img&#39;</span>, <span style="color:#e6db74">&#39;wb&#39;</span>) <span style="color:#66d9ef">as</span> f3:
+            x <span style="color:#f92672">=</span> f1<span style="color:#f92672">.</span>read()
+            y <span style="color:#f92672">=</span> f2<span style="color:#f92672">.</span>read()
+            f3<span style="color:#f92672">.</span>write(xor(x,y))
+</code></pre></div><p>Using this I was able to get a usable disk3.img.</p>
+<h3 id="step-5---getting-the-flag">Step 5 - Getting the Flag<a href="#step-5---getting-the-flag" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>Using the new disk3 I got by XOR&rsquo;ing disks 1 &amp; 2 with the python script I ran a new bash script that was an edited version of the prior bash script to get all the permutations with the new disk.img.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
+</span><span style="color:#75715e"></span>cd ~/Desktop
+unzip -q forensics_intergalactic_recovery.zip
+cd forensics_intergalactic_recovery
+perm<span style="color:#f92672">=(</span><span style="color:#e6db74">&#34;123&#34;</span> <span style="color:#e6db74">&#34;231&#34;</span> <span style="color:#e6db74">&#34;312&#34;</span> <span style="color:#e6db74">&#34;213&#34;</span> <span style="color:#e6db74">&#34;321&#34;</span> <span style="color:#e6db74">&#34;132&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">for</span> t in <span style="color:#e6db74">${</span>perm[@]<span style="color:#e6db74">}</span>; <span style="color:#66d9ef">do</span>
+        <span style="color:#66d9ef">for</span> i in <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> 3; <span style="color:#66d9ef">do</span>
+        sudo losetup /dev/loop<span style="color:#e6db74">${</span>i<span style="color:#e6db74">}</span> disk<span style="color:#e6db74">${</span>i<span style="color:#e6db74">}</span>.img
+        <span style="color:#66d9ef">done</span>
+        sudo mdadm --create /dev/md0 --level<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span> --raid-devices<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> /dev/loop<span style="color:#e6db74">${</span>t:0:1<span style="color:#e6db74">}</span> /dev/loop<span style="color:#e6db74">${</span>t:1:1<span style="color:#e6db74">}</span> /dev/loop<span style="color:#e6db74">${</span>t:2:1<span style="color:#e6db74">}</span>
+        read -p <span style="color:#e6db74">&#34;Press [Enter] key to start backup...&#34;</span>
+        sudo umount /dev/md0
+        sudo mdadm --stop /dev/md0                                                                                                                                                 
+        sudo losetup -D                                                                                                                                                            
+        sudo losetup -a                                                                                                                                                            
+        sudo rm -r forensics_intergalactic_recovery                                                                                                                                
+        unzip -q forensics_intergalactic_recovery.zip
+        cd forensics_intergalactic_recovery
+<span style="color:#66d9ef">done</span>
+</code></pre></div><p>On the second loop (Disk order 231) I got the flag.</p>
+<!-- raw HTML omitted -->
+<p><img src="https://imgur.com/gallery/Zyf6P6K" alt="Flag"></p>
+<p><!-- raw HTML omitted --></p>
+<h5 id="reference-links">Reference Links<a href="#reference-links" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h5>
+<p><a href="https://itarow.xyz/posts/phack-ctf-2021_raid-dead-redemption_write-up/">The CTF Writeup That Helped</a>
+<!-- raw HTML omitted -->
+<a href="https://en.wikipedia.org/wiki/RAID">Raid 5 Summary</a></p>
+
+      </div></div>
+
+  
+
+  
+  
+
+  
+</div>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2022 Powered by <a href="http://gohugo.io">Hugo</a></span>
+    
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+<script src="http://AbsoluteZer03.github.io/assets/main.js"></script>
+<script src="http://AbsoluteZer03.github.io/assets/prism.js"></script>
+
+
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>
