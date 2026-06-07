@@ -1,177 +1,315 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta name="generator" content="Hugo 0.92.2" />
-  
-    <title>AbsoluteZer03 CTF Writeups</title>
-  
+  <meta name="generator" content="Hugo 0.92.2" />
+  <title>AbsoluteZer0 // CTF Writeups</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="" />
-<meta name="keywords" content="" />
-<meta name="robots" content="noodp" />
-<link rel="canonical" href="/" />
-
-
-
-
-<link rel="stylesheet" href="/assets/style.css">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CTF writeups by AbsoluteZer0" />
+  <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="/assets/purple.css">
-
-
-
-
-
-
-<link rel="apple-touch-icon" href="/img/apple-touch-icon-192x192.png">
-
   <link rel="shortcut icon" href="/img/favicon/purple.png">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --bg:        #0a0a0f;
+      --surface:   #0f0f1a;
+      --border:    #1e1e35;
+      --accent:    #9d4edd;
+      --accent2:   #c77dff;
+      --dim:       #4a4a6a;
+      --text:      #c8c8e0;
+      --text-dim:  #6a6a8a;
+      --mono:      'Share Tech Mono', monospace;
+      --sans:      'Syne', sans-serif;
+    }
 
-<meta name="twitter:card" content="summary" />
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
+    /* scanline overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 999;
+    }
 
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
 
-<meta property="og:locale" content="en" />
-<meta property="og:type" content="website" />
-<meta property="og:title" content="AbsoluteZer03 CTF Writeups">
-<meta property="og:description" content="" />
-<meta property="og:url" content="/" />
-<meta property="og:site_name" content="AbsoluteZer03 CTF Writeups" />
+    /* HEADER */
+    header {
+      padding: 3.5rem 0 2rem;
+      border-bottom: 1px solid var(--border);
+      animation: fadeDown 0.6s ease both;
+    }
 
-  
-    <meta property="og:image" content="/img/favicon/purple.png">
-  
+    .site-title {
+      font-family: var(--sans);
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
 
-<meta property="og:image:width" content="2048">
-<meta property="og:image:height" content="1024">
+    .site-title span {
+      color: var(--accent2);
+    }
 
+    .site-sub {
+      margin-top: 0.4rem;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
 
+    /* MAIN */
+    main {
+      padding: 3rem 0 5rem;
+    }
 
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 1.8rem;
+    }
 
+    .section-label::before {
+      content: '> ';
+      color: var(--accent);
+    }
 
-  <link href="/index.xml" rel="alternate" type="application/rss+xml" title="AbsoluteZer03 CTF Writeups" />
+    /* CATEGORY GRID */
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 4rem;
+    }
 
+    .category-card {
+      display: block;
+      text-decoration: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2rem 1.8rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+      animation: fadeUp 0.5s ease both;
+    }
 
+    .category-card:nth-child(1) { animation-delay: 0.1s; }
+    .category-card:nth-child(2) { animation-delay: 0.2s; }
 
+    .category-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
 
+    .category-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
 
+    .category-card:hover::before {
+      transform: scaleX(1);
+    }
 
+    .cat-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
 
+    .cat-name {
+      font-family: var(--sans);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.6rem;
+    }
 
+    .cat-desc {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
 
+    .cat-count {
+      margin-top: 1.4rem;
+      font-size: 0.7rem;
+      color: var(--dim);
+    }
+
+    .cat-count span {
+      color: var(--accent2);
+    }
+
+    /* RECENT POSTS */
+    .posts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .post-row {
+      display: flex;
+      align-items: baseline;
+      gap: 1.2rem;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      transition: color 0.15s;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .post-row:nth-child(1) { animation-delay: 0.25s; }
+    .post-row:nth-child(2) { animation-delay: 0.35s; }
+
+    .post-row:hover { color: #fff; }
+    .post-row:hover .post-row-title { color: var(--accent2); }
+
+    .post-row-cat {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      flex-shrink: 0;
+      width: 80px;
+    }
+
+    .post-row-title {
+      flex: 1;
+      font-size: 0.88rem;
+      transition: color 0.15s;
+    }
+
+    .post-row-date {
+      font-size: 0.7rem;
+      color: var(--dim);
+      flex-shrink: 0;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.8rem 0;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    footer a {
+      color: var(--dim);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    footer a:hover { color: var(--accent2); }
+
+    /* ANIMATIONS */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
-<body class="purple">
 
+<body>
+<div class="container">
 
-<div class="container center headings--one-size">
+  <header>
+    <div class="site-title">AbsoluteZer<span>0</span></div>
+    <div class="site-sub">CTF Writeups &amp; Challenge Research</div>
+  </header>
 
-  <header class="header">
-  <div class="header__inner">
-    <div class="header__logo">
-      <a href="/">
-  <div class="logo">
-    Terminal
-  </div>
-</a>
+  <main>
+
+    <p class="section-label">Categories</p>
+
+    <div class="categories">
+
+      <a class="category-card" href="/categories/pwn/">
+        <div class="cat-tag">Binary Exploitation</div>
+        <div class="cat-name">PWN</div>
+        <div class="cat-count"><span>1</span> writeup</div>
+      </a>
+
+      <a class="category-card" href="/categories/forensics/">
+        <div class="cat-tag">Digital Forensics</div>
+        <div class="cat-name">Forensics</div>
+        <div class="cat-count"><span>1</span> writeup</div>
+      </a>
 
     </div>
-    
-  </div>
-  
-</header>
 
+    <p class="section-label">Recent Writeups</p>
 
-  <div class="content">
-    
-  
-  <div class="posts">
-    
-    
+    <div class="posts-list">
 
-    
-    
-      
-    
-    
+      <a class="post-row" href="/posts/jukebox/">
+        <span class="post-row-cat">PWN</span>
+        <span class="post-row-title">Jukebox — BSides Fort Wayne 2026</span>
+        <span class="post-row-date">2026</span>
+      </a>
 
-    
-      <div class="post on-list">
-        <h1 class="post-title">
-          <a href="/posts/htb_cyberapocalypse2022/">HTB_CyberApocalypse2022</a>
-        </h1>
-        <div class="post-meta">
-          <span class="post-date">
-            2022-05-27
-          </span>
-          
-        </div>
+      <a class="post-row" href="/posts/htb_cyberapocalypse2022/">
+        <span class="post-row-cat">Forensics</span>
+        <span class="post-row-title">HTB CyberApocalypse 2022</span>
+        <span class="post-row-date">2022-05-27</span>
+      </a>
 
-        
-          <span class="post-tags">
-            
-            #<a href="/tags/"></a>&nbsp;
-            
-            #<a href="/tags/"></a>&nbsp;
-            
-          </span>
-        
+    </div>
 
+  </main>
 
-        
+  <footer>
+    <span>AbsoluteZer0 // <a href="https://github.com/AbsoluteZer03">github</a></span>
+    <span>handle: AbsoluteZer0 &nbsp;|&nbsp; team: 4TheCronPop</span>
+  </footer>
 
-
-
-        <div class="post-content">
-          
-            Cyber Apocalypse 2022 Intergalactic Chase Forensics Intergalactic Recovery   Miyuki’s team stores all the evidence from important cases in a shared RAID 5 disk. Especially now that the case IMW-1337 is almost completed, evidences and clues are needed more than ever. Unfortunately for the team, an electromagnetic pulse caused by Draeger’s EMP cannon has partially destroyed the disk. Can you help her and the rest of team recover the content of the failed disk?
-          
-        </div>
-
-        
-        <div>
-          <a class="read-more button"
-            href="/posts/htb_cyberapocalypse2022/"> →</a>
-        </div>
-        
-      </div>
-    
-    <div class="pagination">
-  <div class="pagination__buttons">
-    
-    
-  </div>
 </div>
-
-  </div>
-
-  </div>
-
-  
-    <footer class="footer">
-  <div class="footer__inner">
-    
-      <div class="copyright">
-        <span>© 2022 Powered by <a href="http://gohugo.io">Hugo</a></span>
-    
-        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
-      </div>
-  </div>
-</footer>
-
-<script src="/assets/main.js"></script>
-<script src="/assets/prism.js"></script>
-
-
-
-
-
-
-
-  
-</div>
-
 </body>
 </html>
