@@ -1,6 +1,109 @@
 ---
-layout: category
-title: PWN
-category_name: "Binary Exploitation"
-category_key: pwn
+layout: default
+title: AbsoluteZer0
 ---
+
+<style>
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #4a4a6a;
+    margin-bottom: 1.8rem;
+  }
+  .section-label::before { content: '> '; color: var(--accent); }
+
+  .bio { margin-bottom: 4rem; }
+  .bio p { font-size: 0.88rem; line-height: 1.8; color: var(--color); margin-bottom: 1.2rem; }
+  .bio p:last-child { margin-bottom: 0; }
+
+  .stat-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.6rem; }
+  .stat {
+    background: #0f0f1a;
+    border: 1px solid #1e1e35;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: #6a6a8a;
+  }
+  .stat span { color: #c77dff; }
+
+  .categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 4rem;
+  }
+
+  .category-card {
+    display: block;
+    text-decoration: none;
+    background: #0f0f1a;
+    border: 1px solid #1e1e35;
+    padding: 2rem 1.8rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .category-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), #c77dff);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .category-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .category-card:hover::before { transform: scaleX(1); }
+
+  .cat-tag { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+  .cat-name { font-family: Syne, sans-serif; font-size: 1.5rem; font-weight: 700; color: #fff; }
+  .cat-count { margin-top: 1.4rem; font-size: 0.7rem; color: #4a4a6a; }
+  .cat-count span { color: #c77dff; }
+</style>
+
+<p class="section-label">About</p>
+
+<div class="bio">
+  <p>Security professional with a passion for breaking things correctly. Background spans endpoint, identity, and cloud security on the defensive side, with an active push into offensive security and vulnerability research through hands-on CTF competition and original challenge authorship.</p>
+  <p>I compete in CTFs under various handles and teams, focusing primarily on binary exploitation and forensics. I also author original challenges — Jukebox, built around MXCSR floating-point rounding mode manipulation as an exploitation primitive, was featured at BSides Fort Wayne 2026.</p>
+
+  <div class="stat-row">
+    <div class="stat"><span>GIAC</span> GSEC</div>
+    <div class="stat"><span>Invited</span> US Cyber Games Pipeline</div>
+    <div class="stat"><span>github.com</span>/AbsoluteZer03</div>
+  </div>
+</div>
+
+<p class="section-label">Writeups</p>
+
+<div class="categories">
+  <a class="category-card" href="/categories/pwn/">
+    <div class="cat-tag">Binary Exploitation</div>
+    <div class="cat-name">PWN</div>
+    <div class="cat-count">
+      <span>{{ site.posts | where_exp: "p", "p.categories contains 'pwn'" | size }}</span> writeup(s)
+    </div>
+  </a>
+  <a class="category-card" href="/categories/forensics/">
+    <div class="cat-tag">Digital Forensics</div>
+    <div class="cat-name">Forensics</div>
+    <div class="cat-count">
+      <span>{{ site.posts | where_exp: "p", "p.categories contains 'forensics'" | size }}</span> writeup(s)
+    </div>
+  </a>
+</div>
