@@ -1,0 +1,17 @@
+---
+layout: default
+---
+<div class="category-page">
+  <div class="section-label">{{ page.category_name }}</div>
+  <div class="posts-list">
+    {% assign cat = page.category_key %}
+    {% for post in site.posts %}
+      {% if post.categories contains cat %}
+      <a class="post-row" href="{{ post.url }}">
+        <span class="post-row-title">{{ post.title }}</span>
+        <span class="post-row-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+      </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

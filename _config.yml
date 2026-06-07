@@ -1,0 +1,16 @@
+title: AbsoluteZer0
+description: CTF Writeups & Challenge Research
+url: "https://absolutezer03.github.io"
+baseurl: ""
+permalink: /posts/:title/
+
+markdown: kramdown
+highlighter: rouge
+
+plugins:
+  - jekyll-feed
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
