@@ -60,7 +60,8 @@ So the 13 and 14th bit of MXCSR are being manipulated to force rounding to move 
 | 12    | PM           | Precision Mask         | Masks precision exceptions                                           |
 | 13-14 | RC           | Rounding Control       | 00=nearest, 01=toward -inf, 10=toward +inf, 11=toward zero           |
 | 15    | FZ           | Flush to Zero          | Flushes underflowing results to zero instead of generating denormals |
-| 16-31 | —            | Reserved               | Unused, must be zero                                                 |
+| 16-31 | -            | Reserved               | Unused, must be zero                                                 |
+
 ## Jukebox RE Part 2
 
 
