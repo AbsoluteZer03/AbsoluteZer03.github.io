@@ -1,3 +1,10 @@
+---
+layout: post
+title: "Jukebox — Official Writeup | BSides Fort Wayne 2026"
+date: 2026-06-07
+categories: [pwn]
+---
+
 ## Challenge Info
 ```
 This old jukebox has been sitting in the corner of the bar for thirty years. Knows every song ever made. Just punch in a number and it plays.
