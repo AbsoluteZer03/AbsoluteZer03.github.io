@@ -15,16 +15,16 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:        #0a0a0f;
-      --surface:   #0f0f1a;
-      --border:    #1e1e35;
-      --accent:    #9d4edd;
-      --accent2:   #c77dff;
-      --dim:       #4a4a6a;
-      --text:      #c8c8e0;
-      --text-dim:  #6a6a8a;
-      --mono:      'Share Tech Mono', monospace;
-      --sans:      'Syne', sans-serif;
+      --bg:       #0a0a0f;
+      --surface:  #0f0f1a;
+      --border:   #1e1e35;
+      --accent:   #9d4edd;
+      --accent2:  #c77dff;
+      --dim:      #4a4a6a;
+      --text:     #c8c8e0;
+      --text-dim: #6a6a8a;
+      --mono:     'Share Tech Mono', monospace;
+      --sans:     'Syne', sans-serif;
     }
 
     body {
@@ -35,7 +35,6 @@
       overflow-x: hidden;
     }
 
-    /* scanline overlay */
     body::before {
       content: '';
       position: fixed;
@@ -57,7 +56,6 @@
       padding: 0 2rem;
     }
 
-    /* HEADER */
     header {
       padding: 3.5rem 0 2rem;
       border-bottom: 1px solid var(--border);
@@ -72,9 +70,7 @@
       color: #fff;
     }
 
-    .site-title span {
-      color: var(--accent2);
-    }
+    .site-title span { color: var(--accent2); }
 
     .site-sub {
       margin-top: 0.4rem;
@@ -84,10 +80,7 @@
       text-transform: uppercase;
     }
 
-    /* MAIN */
-    main {
-      padding: 3rem 0 5rem;
-    }
+    main { padding: 3rem 0 5rem; }
 
     .section-label {
       font-size: 0.7rem;
@@ -97,12 +90,43 @@
       margin-bottom: 1.8rem;
     }
 
-    .section-label::before {
-      content: '> ';
-      color: var(--accent);
+    .section-label::before { content: '> '; color: var(--accent); }
+
+    /* BIO */
+    .bio {
+      margin-bottom: 4rem;
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.1s;
     }
 
-    /* CATEGORY GRID */
+    .bio p {
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: var(--text);
+      margin-bottom: 1.2rem;
+    }
+
+    .bio p:last-child { margin-bottom: 0; }
+
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.6rem;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.9rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+    }
+
+    .stat span { color: var(--accent2); }
+
+    /* CATEGORIES */
     .categories {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -122,8 +146,8 @@
       animation: fadeUp 0.5s ease both;
     }
 
-    .category-card:nth-child(1) { animation-delay: 0.1s; }
-    .category-card:nth-child(2) { animation-delay: 0.2s; }
+    .category-card:nth-child(1) { animation-delay: 0.2s; }
+    .category-card:nth-child(2) { animation-delay: 0.3s; }
 
     .category-card::before {
       content: '';
@@ -136,14 +160,8 @@
       transition: transform 0.3s ease;
     }
 
-    .category-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    .category-card:hover::before {
-      transform: scaleX(1);
-    }
+    .category-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .category-card:hover::before { transform: scaleX(1); }
 
     .cat-tag {
       font-size: 0.65rem;
@@ -158,73 +176,12 @@
       font-size: 1.5rem;
       font-weight: 700;
       color: #fff;
-      margin-bottom: 0.6rem;
     }
 
-    .cat-desc {
-      font-size: 0.78rem;
-      color: var(--text-dim);
-      line-height: 1.6;
-    }
+    .cat-count { margin-top: 1.4rem; font-size: 0.7rem; color: var(--dim); }
+    .cat-count span { color: var(--accent2); }
 
-    .cat-count {
-      margin-top: 1.4rem;
-      font-size: 0.7rem;
-      color: var(--dim);
-    }
-
-    .cat-count span {
-      color: var(--accent2);
-    }
-
-    /* RECENT POSTS */
-    .posts-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .post-row {
-      display: flex;
-      align-items: baseline;
-      gap: 1.2rem;
-      padding: 0.9rem 0;
-      border-bottom: 1px solid var(--border);
-      text-decoration: none;
-      color: var(--text);
-      transition: color 0.15s;
-      animation: fadeUp 0.5s ease both;
-    }
-
-    .post-row:nth-child(1) { animation-delay: 0.25s; }
-    .post-row:nth-child(2) { animation-delay: 0.35s; }
-
-    .post-row:hover { color: #fff; }
-    .post-row:hover .post-row-title { color: var(--accent2); }
-
-    .post-row-cat {
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      flex-shrink: 0;
-      width: 80px;
-    }
-
-    .post-row-title {
-      flex: 1;
-      font-size: 0.88rem;
-      transition: color 0.15s;
-    }
-
-    .post-row-date {
-      font-size: 0.7rem;
-      color: var(--dim);
-      flex-shrink: 0;
-    }
-
-    /* FOOTER */
-    footer {
+    .site-footer {
       border-top: 1px solid var(--border);
       padding: 1.8rem 0;
       font-size: 0.72rem;
@@ -236,15 +193,9 @@
       flex-wrap: wrap;
     }
 
-    footer a {
-      color: var(--dim);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
+    .site-footer a { color: var(--dim); text-decoration: none; transition: color 0.15s; }
+    .site-footer a:hover { color: var(--accent2); }
 
-    footer a:hover { color: var(--accent2); }
-
-    /* ANIMATIONS */
     @keyframes fadeDown {
       from { opacity: 0; transform: translateY(-12px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -267,45 +218,37 @@
 
   <main>
 
-    <p class="section-label">Categories</p>
+    <p class="section-label">About</p>
+
+    <div class="bio">
+      <p>Security professional with a passion for breaking things correctly. Background spans endpoint, identity, and cloud security on the defensive side, with an active push into offensive security and vulnerability research through hands-on CTF competition and original challenge authorship.</p>
+      <p>I compete in CTFs under various handles and teams, focusing primarily on binary exploitation and reverse engineering. I also have developed multiple binary exploitation challenges for various ctfs.</p>
+
+      <div class="stat-row">
+        <div class="stat"><span>Invited</span> US Cyber Games Pipeline</div>
+        <div class="stat"><span>GIAC</span> GSEC</div>
+        <div class="stat"><span>github.com</span>/AbsoluteZer03</div>
+      </div>
+    </div>
+
+    <p class="section-label">Writeups</p>
 
     <div class="categories">
-
       <a class="category-card" href="/categories/pwn/">
         <div class="cat-tag">Binary Exploitation</div>
         <div class="cat-name">PWN</div>
         <div class="cat-count"><span>1</span> writeup</div>
       </a>
-
       <a class="category-card" href="/categories/forensics/">
         <div class="cat-tag">Digital Forensics</div>
         <div class="cat-name">Forensics</div>
         <div class="cat-count"><span>1</span> writeup</div>
       </a>
-
-    </div>
-
-    <p class="section-label">Recent Writeups</p>
-
-    <div class="posts-list">
-
-      <a class="post-row" href="/posts/jukebox/">
-        <span class="post-row-cat">PWN</span>
-        <span class="post-row-title">Jukebox — BSides Fort Wayne 2026</span>
-        <span class="post-row-date">2026</span>
-      </a>
-
-      <a class="post-row" href="/posts/htb_cyberapocalypse2022/">
-        <span class="post-row-cat">Forensics</span>
-        <span class="post-row-title">HTB CyberApocalypse 2022</span>
-        <span class="post-row-date">2022-05-27</span>
-      </a>
-
     </div>
 
   </main>
 
-  <footer>
+  <footer class="site-footer">
     <span>AbsoluteZer0 // <a href="https://github.com/AbsoluteZer03">github</a></span>
     <span>handle: AbsoluteZer0 &nbsp;|&nbsp; team: 4TheCronPop</span>
   </footer>
