@@ -64,13 +64,6 @@ So the 13 and 14th bit of MXCSR are being manipulated to force rounding to move 
 
 ## Jukebox RE Part 2
 
-
-```c
-int64_t rax = dlopen("./soundcard.so", 2);
-```
-
-This initializes the plugin so before anything happens so if you didn't already reverse it this is a sign to go reverse it.
-
 ```nasm
 0040123a  f30f2d45e0         cvtss2si eax, dword [rbp-0x20 {var_28_1}]
 ```
