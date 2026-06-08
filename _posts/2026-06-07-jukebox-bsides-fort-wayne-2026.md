@@ -21,7 +21,7 @@ Challenge Author: AbsoluteZer0
 
 ## Jukebox RE Part 1
 
-After opening Jukebox the first thing the program does. It initializes the soundcard.so so lets go look at that and see what's going on.
+After opening Jukebox the first thing the program does is it initializes the soundcard.so so lets go look at that and see what's going on.
 
 ```c
 int64_t rax = dlopen("./soundcard.so", 2);
